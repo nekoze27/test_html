@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポートフォリオ</title>
+</head>
+<body>
+    <h1>ポートフォリオ</h1>
+    <div id="portfolio"></div>
+
+    <script>
+        // JSONファイルのURL
+        const jsonUrl = 'index.json';
+
+        // データを取得して表示する関数
+        async function fetchData() {
+            try {
+                const response = await fetch(jsonUrl);
+                const data = await response.json();
+
+                const portfolioDiv = document.getElementById('portfolio');
+                portfolioDiv.innerHTML = '';
+
+                data.forEach(item => {
+                    const portfolioItem = document.createElement('div');
+                    portfolioItem.className = 'portfolio-item';
+                    portfolioItem.innerHTML = `
+                        <h2>${item.title}</h2>
+                        <img src="${item.thumbnail}" alt="${item.title}">
+                        <p><strong>概要:</strong> ${item.summary}</p>
+                        <p>${item.content}</p>
+                        <p><a href="${item.source}" target="_blank">ソースコード</a></p>
+                        <p><small>${item.date}</small></p>
+                    `;
+                    portfolioDiv.appendChild(portfolioItem);
+                });
+            } catch (error) {
+                console.error('データの取得に失敗しました:', error);
+            }
+        }
+
+        // ページがロードされたらデータを取得
+        document.addEventListener('DOMContentLoaded', fetchData);
+    </script>
+</body>
+</html>
